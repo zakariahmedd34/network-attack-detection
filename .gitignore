@@ -78,6 +78,13 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Dataset CSVs — too large for git (600 MB). See PIPELINE.md to obtain them.
+data/raw/CSVs/
+data/raw/*.zip
+
+# Claude AI internal files
+.claude/
+
 # IPython
 profile_default/
 ipython_config.py
