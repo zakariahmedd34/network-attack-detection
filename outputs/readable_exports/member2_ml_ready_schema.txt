@@ -1,0 +1,10 @@
+Columns:
+- features: vector
+- label: double
+- label_original: string
+
+Schema:
+root
+ |-- features: vector (nullable = true)
+ |-- label: double (nullable = true)
+ |-- label_original: string (nullable = true)

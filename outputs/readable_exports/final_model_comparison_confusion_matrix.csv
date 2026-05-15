@@ -1,0 +1,13 @@
+model,label,prediction,count
+Model A - Logistic Regression,0.0,0.0,23161
+Model A - Logistic Regression,0.0,1.0,3480
+Model A - Logistic Regression,1.0,0.0,3106
+Model A - Logistic Regression,1.0,1.0,127601
+Model B - Deep Learning MLP,0.0,0.0,24593
+Model B - Deep Learning MLP,0.0,1.0,2048
+Model B - Deep Learning MLP,1.0,0.0,610
+Model B - Deep Learning MLP,1.0,1.0,130097
+Model C - Random Forest,0.0,0.0,26361
+Model C - Random Forest,0.0,1.0,280
+Model C - Random Forest,1.0,0.0,440
+Model C - Random Forest,1.0,1.0,130267

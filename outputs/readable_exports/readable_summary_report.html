@@ -1,0 +1,29 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>IDS2017 Readable Output Summary</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 30px; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+th { background: #f2f2f2; }
+</style>
+</head>
+<body>
+<h1>IDS2017 Readable Output Summary</h1>
+
+<h2>Final Model Metrics</h2>
+<table>
+<tr><th>Model</th><th>Metric</th><th>Value</th></tr>
+<tr><td>Model A - Logistic Regression</td><td>accuracy</td><td>0.958144</td></tr><tr><td>Model A - Logistic Regression</td><td>precision</td><td>0.957926</td></tr><tr><td>Model A - Logistic Regression</td><td>recall</td><td>0.958144</td></tr><tr><td>Model A - Logistic Regression</td><td>f1</td><td>0.958026</td></tr><tr><td>Model A - Logistic Regression</td><td>auc_roc</td><td>0.978348</td></tr><tr><td>Model B - Deep Learning MLP</td><td>accuracy</td><td>0.983108</td></tr><tr><td>Model B - Deep Learning MLP</td><td>precision</td><td>0.983028</td></tr><tr><td>Model B - Deep Learning MLP</td><td>recall</td><td>0.983108</td></tr><tr><td>Model B - Deep Learning MLP</td><td>f1</td><td>0.982919</td></tr><tr><td>Model B - Deep Learning MLP</td><td>auc_roc</td><td>0.994042</td></tr><tr><td>Model C - Random Forest</td><td>accuracy</td><td>0.995424</td></tr><tr><td>Model C - Random Forest</td><td>precision</td><td>0.995439</td></tr><tr><td>Model C - Random Forest</td><td>recall</td><td>0.995424</td></tr><tr><td>Model C - Random Forest</td><td>f1</td><td>0.995430</td></tr><tr><td>Model C - Random Forest</td><td>auc_roc</td><td>0.999912</td></tr>
+</table>
+
+<h2>Final Confusion Matrices</h2>
+<table>
+<tr><th>Model</th><th>Actual Label</th><th>Predicted Label</th><th>Count</th></tr>
+<tr><td>Model A - Logistic Regression</td><td>0.0</td><td>0.0</td><td>23161</td></tr><tr><td>Model A - Logistic Regression</td><td>0.0</td><td>1.0</td><td>3480</td></tr><tr><td>Model A - Logistic Regression</td><td>1.0</td><td>0.0</td><td>3106</td></tr><tr><td>Model A - Logistic Regression</td><td>1.0</td><td>1.0</td><td>127601</td></tr><tr><td>Model B - Deep Learning MLP</td><td>0.0</td><td>0.0</td><td>24593</td></tr><tr><td>Model B - Deep Learning MLP</td><td>0.0</td><td>1.0</td><td>2048</td></tr><tr><td>Model B - Deep Learning MLP</td><td>1.0</td><td>0.0</td><td>610</td></tr><tr><td>Model B - Deep Learning MLP</td><td>1.0</td><td>1.0</td><td>130097</td></tr><tr><td>Model C - Random Forest</td><td>0.0</td><td>0.0</td><td>26361</td></tr><tr><td>Model C - Random Forest</td><td>0.0</td><td>1.0</td><td>280</td></tr><tr><td>Model C - Random Forest</td><td>1.0</td><td>0.0</td><td>440</td></tr><tr><td>Model C - Random Forest</td><td>1.0</td><td>1.0</td><td>130267</td></tr>
+</table>
+</body>
+</html>

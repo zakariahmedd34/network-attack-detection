@@ -1,0 +1,16 @@
+Columns:
+- features: vector
+- label: double
+- label_original: string
+- rawPrediction: vector
+- probability: vector
+- prediction: double
+
+Schema:
+root
+ |-- features: vector (nullable = true)
+ |-- label: double (nullable = true)
+ |-- label_original: string (nullable = true)
+ |-- rawPrediction: vector (nullable = true)
+ |-- probability: vector (nullable = true)
+ |-- prediction: double (nullable = true)

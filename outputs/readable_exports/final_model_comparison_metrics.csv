@@ -1,0 +1,16 @@
+model,metric,value
+Model A - Logistic Regression,accuracy,0.9581437323639321
+Model A - Logistic Regression,precision,0.9579257738492684
+Model A - Logistic Regression,recall,0.9581437323639321
+Model A - Logistic Regression,f1,0.9580256927216964
+Model A - Logistic Regression,auc_roc,0.9783476561417959
+Model B - Deep Learning MLP,accuracy,0.9831075069273203
+Model B - Deep Learning MLP,precision,0.983027949004455
+Model B - Deep Learning MLP,recall,0.9831075069273203
+Model B - Deep Learning MLP,f1,0.9829194402839867
+Model B - Deep Learning MLP,auc_roc,0.9940418728331861
+Model C - Random Forest,accuracy,0.9954241553753463
+Model C - Random Forest,precision,0.9954386684052742
+Model C - Random Forest,recall,0.9954241553753463
+Model C - Random Forest,f1,0.9954296039916695
+Model C - Random Forest,auc_roc,0.9999117181456101

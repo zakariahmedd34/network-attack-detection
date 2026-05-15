@@ -1,0 +1,248 @@
+Columns:
+- flow_id: double
+- timestamp: double
+- src_ip: double
+- src_port: double
+- dst_ip: double
+- dst_port: double
+- protocol: double
+- duration: double
+- packets_count: double
+- fwd_packets_count: double
+- bwd_packets_count: double
+- total_payload_bytes: double
+- fwd_total_payload_bytes: double
+- bwd_total_payload_bytes: double
+- payload_bytes_max: double
+- payload_bytes_min: double
+- payload_bytes_mean: double
+- payload_bytes_std: double
+- payload_bytes_variance: double
+- fwd_payload_bytes_max: double
+- fwd_payload_bytes_min: double
+- fwd_payload_bytes_mean: double
+- fwd_payload_bytes_std: double
+- fwd_payload_bytes_variance: double
+- bwd_payload_bytes_max: double
+- bwd_payload_bytes_min: double
+- bwd_payload_bytes_mean: double
+- bwd_payload_bytes_std: double
+- bwd_payload_bytes_variance: double
+- total_header_bytes: double
+- max_header_bytes: double
+- min_header_bytes: double
+- mean_header_bytes: double
+- std_header_bytes: double
+- fwd_total_header_bytes: double
+- fwd_max_header_bytes: double
+- fwd_min_header_bytes: double
+- fwd_mean_header_bytes: double
+- fwd_std_header_bytes: double
+- bwd_total_header_bytes: double
+- bwd_max_header_bytes: double
+- bwd_min_header_bytes: double
+- bwd_mean_header_bytes: double
+- bwd_std_header_bytes: double
+- fwd_avg_segment_size: double
+- bwd_avg_segment_size: double
+- avg_segment_size: double
+- fwd_init_win_bytes: double
+- bwd_init_win_bytes: double
+- active_min: double
+- active_max: double
+- active_mean: double
+- active_std: double
+- idle_min: double
+- idle_max: double
+- idle_mean: double
+- idle_std: double
+- bytes_rate: double
+- fwd_bytes_rate: double
+- bwd_bytes_rate: double
+- packets_rate: double
+- bwd_packets_rate: double
+- fwd_packets_rate: double
+- down_up_rate: double
+- avg_fwd_bytes_per_bulk: double
+- avg_fwd_packets_per_bulk: double
+- avg_fwd_bulk_rate: double
+- avg_bwd_bytes_per_bulk: double
+- avg_bwd_packets_bulk_rate: double
+- avg_bwd_bulk_rate: double
+- fwd_bulk_state_count: double
+- fwd_bulk_total_size: double
+- fwd_bulk_per_packet: double
+- fwd_bulk_duration: double
+- bwd_bulk_state_count: double
+- bwd_bulk_total_size: double
+- bwd_bulk_per_packet: double
+- bwd_bulk_duration: double
+- fin_flag_counts: double
+- psh_flag_counts: double
+- urg_flag_counts: double
+- ece_flag_counts: double
+- syn_flag_counts: double
+- ack_flag_counts: double
+- cwr_flag_counts: double
+- rst_flag_counts: double
+- fwd_fin_flag_counts: double
+- fwd_psh_flag_counts: double
+- fwd_urg_flag_counts: double
+- fwd_ece_flag_counts: double
+- fwd_syn_flag_counts: double
+- fwd_ack_flag_counts: double
+- fwd_cwr_flag_counts: double
+- fwd_rst_flag_counts: double
+- bwd_fin_flag_counts: double
+- bwd_psh_flag_counts: double
+- bwd_urg_flag_counts: double
+- bwd_ece_flag_counts: double
+- bwd_syn_flag_counts: double
+- bwd_ack_flag_counts: double
+- bwd_cwr_flag_counts: double
+- bwd_rst_flag_counts: double
+- packets_IAT_mean: double
+- packet_IAT_std: double
+- packet_IAT_max: double
+- packet_IAT_min: double
+- packet_IAT_total: double
+- fwd_packets_IAT_mean: double
+- fwd_packets_IAT_std: double
+- fwd_packets_IAT_max: double
+- fwd_packets_IAT_min: double
+- fwd_packets_IAT_total: double
+- bwd_packets_IAT_mean: double
+- bwd_packets_IAT_std: double
+- bwd_packets_IAT_max: double
+- bwd_packets_IAT_min: double
+- bwd_packets_IAT_total: double
+- subflow_fwd_packets: double
+- subflow_bwd_packets: double
+- subflow_fwd_bytes: double
+- subflow_bwd_bytes: double
+- label: string
+
+Schema:
+root
+ |-- flow_id: double (nullable = true)
+ |-- timestamp: double (nullable = true)
+ |-- src_ip: double (nullable = true)
+ |-- src_port: double (nullable = true)
+ |-- dst_ip: double (nullable = true)
+ |-- dst_port: double (nullable = true)
+ |-- protocol: double (nullable = true)
+ |-- duration: double (nullable = true)
+ |-- packets_count: double (nullable = true)
+ |-- fwd_packets_count: double (nullable = true)
+ |-- bwd_packets_count: double (nullable = true)
+ |-- total_payload_bytes: double (nullable = true)
+ |-- fwd_total_payload_bytes: double (nullable = true)
+ |-- bwd_total_payload_bytes: double (nullable = true)
+ |-- payload_bytes_max: double (nullable = true)
+ |-- payload_bytes_min: double (nullable = true)
+ |-- payload_bytes_mean: double (nullable = true)
+ |-- payload_bytes_std: double (nullable = true)
+ |-- payload_bytes_variance: double (nullable = true)
+ |-- fwd_payload_bytes_max: double (nullable = true)
+ |-- fwd_payload_bytes_min: double (nullable = true)
+ |-- fwd_payload_bytes_mean: double (nullable = true)
+ |-- fwd_payload_bytes_std: double (nullable = true)
+ |-- fwd_payload_bytes_variance: double (nullable = true)
+ |-- bwd_payload_bytes_max: double (nullable = true)
+ |-- bwd_payload_bytes_min: double (nullable = true)
+ |-- bwd_payload_bytes_mean: double (nullable = true)
+ |-- bwd_payload_bytes_std: double (nullable = true)
+ |-- bwd_payload_bytes_variance: double (nullable = true)
+ |-- total_header_bytes: double (nullable = true)
+ |-- max_header_bytes: double (nullable = true)
+ |-- min_header_bytes: double (nullable = true)
+ |-- mean_header_bytes: double (nullable = true)
+ |-- std_header_bytes: double (nullable = true)
+ |-- fwd_total_header_bytes: double (nullable = true)
+ |-- fwd_max_header_bytes: double (nullable = true)
+ |-- fwd_min_header_bytes: double (nullable = true)
+ |-- fwd_mean_header_bytes: double (nullable = true)
+ |-- fwd_std_header_bytes: double (nullable = true)
+ |-- bwd_total_header_bytes: double (nullable = true)
+ |-- bwd_max_header_bytes: double (nullable = true)
+ |-- bwd_min_header_bytes: double (nullable = true)
+ |-- bwd_mean_header_bytes: double (nullable = true)
+ |-- bwd_std_header_bytes: double (nullable = true)
+ |-- fwd_avg_segment_size: double (nullable = true)
+ |-- bwd_avg_segment_size: double (nullable = true)
+ |-- avg_segment_size: double (nullable = true)
+ |-- fwd_init_win_bytes: double (nullable = true)
+ |-- bwd_init_win_bytes: double (nullable = true)
+ |-- active_min: double (nullable = true)
+ |-- active_max: double (nullable = true)
+ |-- active_mean: double (nullable = true)
+ |-- active_std: double (nullable = true)
+ |-- idle_min: double (nullable = true)
+ |-- idle_max: double (nullable = true)
+ |-- idle_mean: double (nullable = true)
+ |-- idle_std: double (nullable = true)
+ |-- bytes_rate: double (nullable = true)
+ |-- fwd_bytes_rate: double (nullable = true)
+ |-- bwd_bytes_rate: double (nullable = true)
+ |-- packets_rate: double (nullable = true)
+ |-- bwd_packets_rate: double (nullable = true)
+ |-- fwd_packets_rate: double (nullable = true)
+ |-- down_up_rate: double (nullable = true)
+ |-- avg_fwd_bytes_per_bulk: double (nullable = true)
+ |-- avg_fwd_packets_per_bulk: double (nullable = true)
+ |-- avg_fwd_bulk_rate: double (nullable = true)
+ |-- avg_bwd_bytes_per_bulk: double (nullable = true)
+ |-- avg_bwd_packets_bulk_rate: double (nullable = true)
+ |-- avg_bwd_bulk_rate: double (nullable = true)
+ |-- fwd_bulk_state_count: double (nullable = true)
+ |-- fwd_bulk_total_size: double (nullable = true)
+ |-- fwd_bulk_per_packet: double (nullable = true)
+ |-- fwd_bulk_duration: double (nullable = true)
+ |-- bwd_bulk_state_count: double (nullable = true)
+ |-- bwd_bulk_total_size: double (nullable = true)
+ |-- bwd_bulk_per_packet: double (nullable = true)
+ |-- bwd_bulk_duration: double (nullable = true)
+ |-- fin_flag_counts: double (nullable = true)
+ |-- psh_flag_counts: double (nullable = true)
+ |-- urg_flag_counts: double (nullable = true)
+ |-- ece_flag_counts: double (nullable = true)
+ |-- syn_flag_counts: double (nullable = true)
+ |-- ack_flag_counts: double (nullable = true)
+ |-- cwr_flag_counts: double (nullable = true)
+ |-- rst_flag_counts: double (nullable = true)
+ |-- fwd_fin_flag_counts: double (nullable = true)
+ |-- fwd_psh_flag_counts: double (nullable = true)
+ |-- fwd_urg_flag_counts: double (nullable = true)
+ |-- fwd_ece_flag_counts: double (nullable = true)
+ |-- fwd_syn_flag_counts: double (nullable = true)
+ |-- fwd_ack_flag_counts: double (nullable = true)
+ |-- fwd_cwr_flag_counts: double (nullable = true)
+ |-- fwd_rst_flag_counts: double (nullable = true)
+ |-- bwd_fin_flag_counts: double (nullable = true)
+ |-- bwd_psh_flag_counts: double (nullable = true)
+ |-- bwd_urg_flag_counts: double (nullable = true)
+ |-- bwd_ece_flag_counts: double (nullable = true)
+ |-- bwd_syn_flag_counts: double (nullable = true)
+ |-- bwd_ack_flag_counts: double (nullable = true)
+ |-- bwd_cwr_flag_counts: double (nullable = true)
+ |-- bwd_rst_flag_counts: double (nullable = true)
+ |-- packets_IAT_mean: double (nullable = true)
+ |-- packet_IAT_std: double (nullable = true)
+ |-- packet_IAT_max: double (nullable = true)
+ |-- packet_IAT_min: double (nullable = true)
+ |-- packet_IAT_total: double (nullable = true)
+ |-- fwd_packets_IAT_mean: double (nullable = true)
+ |-- fwd_packets_IAT_std: double (nullable = true)
+ |-- fwd_packets_IAT_max: double (nullable = true)
+ |-- fwd_packets_IAT_min: double (nullable = true)
+ |-- fwd_packets_IAT_total: double (nullable = true)
+ |-- bwd_packets_IAT_mean: double (nullable = true)
+ |-- bwd_packets_IAT_std: double (nullable = true)
+ |-- bwd_packets_IAT_max: double (nullable = true)
+ |-- bwd_packets_IAT_min: double (nullable = true)
+ |-- bwd_packets_IAT_total: double (nullable = true)
+ |-- subflow_fwd_packets: double (nullable = true)
+ |-- subflow_bwd_packets: double (nullable = true)
+ |-- subflow_fwd_bytes: double (nullable = true)
+ |-- subflow_bwd_bytes: double (nullable = true)
+ |-- label: string (nullable = true)

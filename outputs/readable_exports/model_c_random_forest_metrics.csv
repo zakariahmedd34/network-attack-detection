@@ -1,0 +1,9 @@
+model,metric,value
+Model C - Random Forest,precision,0.9954386684052742
+Model C - Random Forest,recall,0.9954241553753463
+Model C - Random Forest,f1,0.9954296039916695
+Model C - Random Forest,auc_roc,0.9999118947598623
+Model A - Logistic Regression,accuracy,0.9585880108125299
+Model A - Logistic Regression,f1,0.9584670602051522
+Model A - Logistic Regression,auc_roc,0.9781193521671149
+Model C - Random Forest,accuracy,0.9954241553753463
