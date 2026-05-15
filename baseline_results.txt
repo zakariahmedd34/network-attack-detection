@@ -1,0 +1,12 @@
+Baseline Model Results
+
+Model:
+Logistic Regression
+
+Dataset:
+IDS2017 ML-ready binary dataset
+
+Metrics:
+Accuracy: 0.9585880108125299
+F1 Score: 0.9584670602051522
+AUC ROC: 0.9781193521671149
