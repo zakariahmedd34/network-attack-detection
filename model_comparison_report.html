@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IDS2017 Model Comparison</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #111827;
+      background: #f8fafc;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+    h1, h2 {
+      margin: 0 0 14px;
+    }
+    .summary {
+      margin-bottom: 22px;
+      padding: 16px 18px;
+      border-left: 5px solid #2563eb;
+      background: #ffffff;
+    }
+    .panel {
+      margin: 18px 0;
+      padding: 18px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+    }
+    th, td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background: #f1f5f9;
+      font-weight: 700;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 18px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>IDS2017 Model Comparison</h1>
+    <section class="summary">
+      <strong>Best model by F1-score:</strong> Model C - Random Forest
+    </section>
+
+    <section class="panel">
+      <h2>Metrics Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Accuracy</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1</th>
+            <th>AUC ROC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Model A - Logistic Regression</td><td>0.9581</td><td>0.9579</td><td>0.9581</td><td>0.9580</td><td>0.9783</td></tr><tr><td>Model B - Deep Learning MLP</td><td>0.9831</td><td>0.9830</td><td>0.9831</td><td>0.9829</td><td>0.9940</td></tr><tr><td>Model C - Random Forest</td><td>0.9954</td><td>0.9954</td><td>0.9954</td><td>0.9954</td><td>0.9999</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <svg viewBox="0 0 1120 840" role="img" aria-label="Model metrics bar chart">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="0" y="20" font-size="18" font-weight="700" fill="#111827">Metric comparison</text>
+<text x="0" y="53" font-size="14" font-weight="700" fill="#111827">ACCURACY</text>
+<text x="115" y="82" font-size="12" fill="#374151">Model A - Logistic Regression</text>
+<rect x="325" y="65" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="65" width="622" height="22" rx="4" fill="#2563eb"/>
+<text x="985" y="81" font-size="12" fill="#111827">0.9581</text>
+<text x="115" y="124" font-size="12" fill="#374151">Model B - Deep Learning MLP</text>
+<rect x="325" y="107" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="107" width="639" height="22" rx="4" fill="#059669"/>
+<text x="985" y="123" font-size="12" fill="#111827">0.9831</text>
+<text x="115" y="166" font-size="12" fill="#374151">Model C - Random Forest</text>
+<rect x="325" y="149" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="149" width="647" height="22" rx="4" fill="#dc2626"/>
+<text x="985" y="165" font-size="12" fill="#111827">0.9954</text>
+<text x="0" y="209" font-size="14" font-weight="700" fill="#111827">PRECISION</text>
+<text x="115" y="238" font-size="12" fill="#374151">Model A - Logistic Regression</text>
+<rect x="325" y="221" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="221" width="622" height="22" rx="4" fill="#2563eb"/>
+<text x="985" y="237" font-size="12" fill="#111827">0.9579</text>
+<text x="115" y="280" font-size="12" fill="#374151">Model B - Deep Learning MLP</text>
+<rect x="325" y="263" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="263" width="638" height="22" rx="4" fill="#059669"/>
+<text x="985" y="279" font-size="12" fill="#111827">0.9830</text>
+<text x="115" y="322" font-size="12" fill="#374151">Model C - Random Forest</text>
+<rect x="325" y="305" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="305" width="647" height="22" rx="4" fill="#dc2626"/>
+<text x="985" y="321" font-size="12" fill="#111827">0.9954</text>
+<text x="0" y="365" font-size="14" font-weight="700" fill="#111827">RECALL</text>
+<text x="115" y="394" font-size="12" fill="#374151">Model A - Logistic Regression</text>
+<rect x="325" y="377" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="377" width="622" height="22" rx="4" fill="#2563eb"/>
+<text x="985" y="393" font-size="12" fill="#111827">0.9581</text>
+<text x="115" y="436" font-size="12" fill="#374151">Model B - Deep Learning MLP</text>
+<rect x="325" y="419" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="419" width="639" height="22" rx="4" fill="#059669"/>
+<text x="985" y="435" font-size="12" fill="#111827">0.9831</text>
+<text x="115" y="478" font-size="12" fill="#374151">Model C - Random Forest</text>
+<rect x="325" y="461" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="461" width="647" height="22" rx="4" fill="#dc2626"/>
+<text x="985" y="477" font-size="12" fill="#111827">0.9954</text>
+<text x="0" y="521" font-size="14" font-weight="700" fill="#111827">F1</text>
+<text x="115" y="550" font-size="12" fill="#374151">Model A - Logistic Regression</text>
+<rect x="325" y="533" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="533" width="622" height="22" rx="4" fill="#2563eb"/>
+<text x="985" y="549" font-size="12" fill="#111827">0.9580</text>
+<text x="115" y="592" font-size="12" fill="#374151">Model B - Deep Learning MLP</text>
+<rect x="325" y="575" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="575" width="638" height="22" rx="4" fill="#059669"/>
+<text x="985" y="591" font-size="12" fill="#111827">0.9829</text>
+<text x="115" y="634" font-size="12" fill="#374151">Model C - Random Forest</text>
+<rect x="325" y="617" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="617" width="647" height="22" rx="4" fill="#dc2626"/>
+<text x="985" y="633" font-size="12" fill="#111827">0.9954</text>
+<text x="0" y="677" font-size="14" font-weight="700" fill="#111827">AUC_ROC</text>
+<text x="115" y="706" font-size="12" fill="#374151">Model A - Logistic Regression</text>
+<rect x="325" y="689" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="689" width="635" height="22" rx="4" fill="#2563eb"/>
+<text x="985" y="705" font-size="12" fill="#111827">0.9783</text>
+<text x="115" y="748" font-size="12" fill="#374151">Model B - Deep Learning MLP</text>
+<rect x="325" y="731" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="731" width="646" height="22" rx="4" fill="#059669"/>
+<text x="985" y="747" font-size="12" fill="#111827">0.9940</text>
+<text x="115" y="790" font-size="12" fill="#374151">Model C - Random Forest</text>
+<rect x="325" y="773" width="650" height="22" rx="4" fill="#e5e7eb"/>
+<rect x="325" y="773" width="649" height="22" rx="4" fill="#dc2626"/>
+<text x="985" y="789" font-size="12" fill="#111827">0.9999</text>
+</svg>
+    </section>
+
+    <h2>Confusion Matrices</h2>
+    <div class="grid">
+      <section class="panel"><svg viewBox="0 0 420 320" role="img" aria-label="Model A - Logistic Regression confusion matrix">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="0" y="22" font-size="17" font-weight="700" fill="#111827">Model A - Logistic Regression</text>
+<text x="190" y="48" font-size="13" font-weight="700" fill="#374151">Predicted</text>
+<text x="8" y="180" font-size="13" font-weight="700" fill="#374151" transform="rotate(-90 8 180)">Actual</text>
+<text x="173" y="58" font-size="12" fill="#374151">BENIGN</text>
+<text x="283" y="58" font-size="12" fill="#374151">ATTACK</text>
+<text x="55" y="130" font-size="12" fill="#374151">BENIGN</text>
+<rect x="155" y="70" width="102" height="102" rx="6" fill="rgb(223,236,255)"/>
+<text x="207" y="128" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">23161</text>
+<rect x="265" y="70" width="102" height="102" rx="6" fill="rgb(236,243,255)"/>
+<text x="317" y="128" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">3480</text>
+<text x="55" y="240" font-size="12" fill="#374151">ATTACK</text>
+<rect x="155" y="180" width="102" height="102" rx="6" fill="rgb(236,244,255)"/>
+<text x="207" y="238" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">3106</text>
+<rect x="265" y="180" width="102" height="102" rx="6" fill="rgb(156,196,255)"/>
+<text x="317" y="238" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">127601</text>
+</svg></section>
+<section class="panel"><svg viewBox="0 0 420 320" role="img" aria-label="Model B - Deep Learning MLP confusion matrix">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="0" y="22" font-size="17" font-weight="700" fill="#111827">Model B - Deep Learning MLP</text>
+<text x="190" y="48" font-size="13" font-weight="700" fill="#374151">Predicted</text>
+<text x="8" y="180" font-size="13" font-weight="700" fill="#374151" transform="rotate(-90 8 180)">Actual</text>
+<text x="173" y="58" font-size="12" fill="#374151">BENIGN</text>
+<text x="283" y="58" font-size="12" fill="#374151">ATTACK</text>
+<text x="55" y="130" font-size="12" fill="#374151">BENIGN</text>
+<rect x="155" y="70" width="102" height="102" rx="6" fill="rgb(222,236,255)"/>
+<text x="207" y="128" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">24593</text>
+<rect x="265" y="70" width="102" height="102" rx="6" fill="rgb(237,244,255)"/>
+<text x="317" y="128" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">2048</text>
+<text x="55" y="240" font-size="12" fill="#374151">ATTACK</text>
+<rect x="155" y="180" width="102" height="102" rx="6" fill="rgb(238,245,255)"/>
+<text x="207" y="238" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">610</text>
+<rect x="265" y="180" width="102" height="102" rx="6" fill="rgb(156,196,255)"/>
+<text x="317" y="238" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">130097</text>
+</svg></section>
+<section class="panel"><svg viewBox="0 0 420 320" role="img" aria-label="Model C - Random Forest confusion matrix">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="0" y="22" font-size="17" font-weight="700" fill="#111827">Model C - Random Forest</text>
+<text x="190" y="48" font-size="13" font-weight="700" fill="#374151">Predicted</text>
+<text x="8" y="180" font-size="13" font-weight="700" fill="#374151" transform="rotate(-90 8 180)">Actual</text>
+<text x="173" y="58" font-size="12" fill="#374151">BENIGN</text>
+<text x="283" y="58" font-size="12" fill="#374151">ATTACK</text>
+<text x="55" y="130" font-size="12" fill="#374151">BENIGN</text>
+<rect x="155" y="70" width="102" height="102" rx="6" fill="rgb(221,235,255)"/>
+<text x="207" y="128" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">26361</text>
+<rect x="265" y="70" width="102" height="102" rx="6" fill="rgb(238,245,255)"/>
+<text x="317" y="128" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">280</text>
+<text x="55" y="240" font-size="12" fill="#374151">ATTACK</text>
+<rect x="155" y="180" width="102" height="102" rx="6" fill="rgb(238,245,255)"/>
+<text x="207" y="238" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">440</text>
+<rect x="265" y="180" width="102" height="102" rx="6" fill="rgb(156,196,255)"/>
+<text x="317" y="238" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">130267</text>
+</svg></section>
+    </div>
+  </main>
+</body>
+</html>

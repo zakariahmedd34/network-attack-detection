@@ -1,0 +1,32 @@
+{
+  "Model A - Logistic Regression": [
+    [
+      23161,
+      3480
+    ],
+    [
+      3106,
+      127601
+    ]
+  ],
+  "Model B - Deep Learning MLP": [
+    [
+      24593,
+      2048
+    ],
+    [
+      610,
+      130097
+    ]
+  ],
+  "Model C - Random Forest": [
+    [
+      26361,
+      280
+    ],
+    [
+      440,
+      130267
+    ]
+  ]
+}
