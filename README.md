@@ -1,190 +1,129 @@
-# Network Attack Detection — CSCI461 Big Data
+# Network Attack Detection — Big Data Pipeline
 
-## Team
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python)
+![PySpark](https://img.shields.io/badge/PySpark-3.3%2B-orange?logo=apache-spark)
+![Hadoop](https://img.shields.io/badge/Hadoop-HDFS-yellow?logo=apache-hadoop)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-| Member | Task |
+An end-to-end distributed machine learning pipeline for network intrusion detection, built on **Apache Spark** and **Hadoop HDFS**. Three models — Logistic Regression, Deep Learning MLP, and Random Forest — are trained and compared on the **CIC-IDS2017** dataset, achieving up to **99.54% accuracy** and **AUC-ROC of 0.9999** with Random Forest.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [System Architecture](#system-architecture)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Dataset](#dataset)
+- [Folder Structure](#folder-structure)
+- [Installation](#installation)
+- [Running the Pipeline](#running-the-pipeline)
+- [Local Reports & Interactive Dashboard](#local-reports--interactive-dashboard)
+- [Results](#results)
+- [Performance Metrics](#performance-metrics)
+- [Future Improvements](#future-improvements)
+- [License](#license)
+
+---
+
+## Overview
+
+Network intrusion detection is a critical problem in cybersecurity. Traditional rule-based systems struggle to adapt to evolving attack patterns. This project implements a **scalable big data pipeline** that:
+
+- Ingests and cleans 14 raw CSV files (785,583 network flow records, 122 features) from the CIC-IDS2017 dataset
+- Engineers domain-specific features and prepares a binary classification target (BENIGN vs. ATTACK)
+- Trains and evaluates three machine learning models using **Spark MLlib** on a distributed Hadoop/Spark cluster
+- Generates professional visualizations, an interactive Streamlit dashboard, and a standalone HTML report
+
+The pipeline is **fully automated** and **idempotent** — it safely re-runs without retraining completed stages.
+
+---
+
+## System Architecture
+
+```
+14 raw CSVs (600 MB)
+      │
+      ▼  scripts/02_upload_hdfs.sh
+HDFS  /user/bigdata/ids2017/raw
+      │
+      ▼  04_clean.py  [Spark]
+HDFS  /processed/cleaned          ← 785,583 rows × 122 columns
+      │
+      ▼  05_feature_engineering.py  [Spark]
+HDFS  /processed/ml_ready_binary  ← features vector · label · label_original
+      │
+      ├──────────────┬──────────────┐
+      ▼              ▼              ▼
+06_baseline    07_improved    08_random_forest
+(Logistic Reg) (MLP 3-layer)  (RF 80 trees)
+ [Spark MLlib]  [Spark MLlib]  [Spark MLlib]
+      │              │              │
+      ▼              ▼              ▼
+HDFS /results/model_a  /results/model_b  /results/model_c
+      └──────────────┬──────────────┘
+                     ▼  09_compare_all_models.py
+             /results/model_comparison_all
+             + reports/model_comparison_report.html
+                     │
+                     ▼  scripts/reporting/
+             reports/figures/*.png
+             reports/dashboard.html
+             reports/architecture.png
+```
+
+![System Architecture](reports/architecture.png)
+
+---
+
+## Features
+
+- **Distributed ETL** — Ingests and cleans 600 MB of network flow data across 14 CSV files using PySpark
+- **Robust Cleaning** — Strips Infinity values, filters impossible negatives, standardizes 12 attack labels
+- **Feature Engineering** — Derives 7 domain-specific network flow features; outlier capping at 1st/99th percentile
+- **Three ML Models** — Logistic Regression (baseline), Deep Learning MLP, and Random Forest
+- **Automated Comparison** — Side-by-side accuracy, precision, recall, F1, and AUC-ROC evaluation
+- **Idempotent Pipeline** — Skips completed stages via HDFS `_SUCCESS` markers; safe to re-run
+- **Interactive Dashboard** — Streamlit app with live ROC curves, confusion matrices, and metric charts
+- **Standalone HTML Report** — Self-contained dashboard embeds all charts as base64 (no external files)
+- **Cross-platform Scripts** — Both Bash (`.sh`) and PowerShell (`.ps1`) launchers for every stage
+
+---
+
+## Technologies Used
+
+| Category | Technology |
 |---|---|
-| Member 1 | Data Ingestion + Preprocessing |
-| Member 2 | Preprocessing Part B + Feature Engineering |
-| Member 3 | Model A — Baseline |
-| Member 4 | Model B (Improved) + Comparison |
-| Member 5 | Integration + Visualization + Pipeline Execution |
+| Language | Python 3.8+ |
+| Distributed Computing | Apache Spark 3.3, PySpark |
+| Storage | Apache Hadoop HDFS |
+| Machine Learning | Spark MLlib (Logistic Regression, MLP, Random Forest) |
+| Data Format | Apache Parquet (Snappy compression) |
+| Containerization | Docker Compose |
+| Visualization | Matplotlib, Streamlit |
+| Data Processing | Pandas, NumPy, PyArrow |
+| Evaluation | scikit-learn (ROC/AUC) |
+| Notebooks | Jupyter |
 
 ---
 
-## Setup (do this once)
+## Dataset
 
-### 1. Install Docker Desktop
-- Windows: https://docs.docker.com/desktop/install/windows-install/
-- Mac: https://docs.docker.com/desktop/install/mac-install/
-
-Make sure Docker Desktop is running before any of the steps below.
-
-### 2. Clone the repo
-```bash
-git clone https://github.com/zakariahmedd34/network-attack-detection.git
-cd network-attack-detection
-```
-
-### 3. Get the Hadoop + Spark cluster folder
-Download the `docker-hadoop-spark-jupyter` folder from the shared Google Drive (same link as the CSVs). Place it anywhere on your machine — you just need to know the path.
-
-### 4. Get the dataset CSVs
-Download the 14 CSV files from the shared Google Drive link (sent in the group chat, ~600 MB total). Put all files inside:
-
-```
-network-attack-detection/
-└── data/
-    └── raw/
-        └── CSVs/        <-- all 14 .csv files go here
-```
-
----
-
-## Important Running Rule
-
-Use two different folders:
-
-| Folder | Used for |
-|---|---|
-| `docker-hadoop-spark-jupyter/docker-hadoop-spark-jupyter` | Starting the Docker Hadoop/Spark/Jupyter cluster only |
-| `network-attack-detection` | Running all project scripts |
-
-So normally you:
-
-1. Start the cluster from the Docker cluster folder.
-2. Go back to the project repo folder.
-3. Run project scripts from the project repo folder.
-
----
-
-## Running the Pipeline (Member 1 task)
-
-### Step 1 — Start the cluster
-
-**Windows:**
-```powershell
-cd "C:\path\to\docker-hadoop-spark-jupyter\docker-hadoop-spark-jupyter"
-docker compose up -d
-```
-
-**Mac/Linux:**
-```bash
-cd ~/path/to/docker-hadoop-spark-jupyter/docker-hadoop-spark-jupyter
-docker compose up -d
-```
-
-Wait about 30 seconds, then confirm everything started:
-```bash
-docker ps
-```
-
-You should see at minimum: `namenode`, `datanode`, `spark-master`, `spark-worker`, `jupyter`.
-
----
-
-### Step 2 — Upload CSVs to HDFS
-
-Open a terminal in the `network-attack-detection` folder.
-
-**Windows:**
-```powershell
-.\scripts\02_upload_hdfs.ps1
-```
-
-**Mac/Linux:**
-```bash
-bash scripts/02_upload_hdfs.sh
-```
-
-This copies the 14 CSVs into HDFS inside the cluster. It skips any file already there, so it is safe to run again.
-
----
-
-### Step 3 — Run the cleaning job
-
-**Windows:**
-```powershell
-.\scripts\03_submit.ps1
-```
-
-**Mac/Linux:**
-```bash
-bash scripts/03_submit.sh
-```
-
-Takes about 5–10 minutes. When done it prints the label distribution and saves the cleaned data to HDFS as Parquet.
-
----
-
-### Optional Jupyter Notebook (Member 1 EDA walkthrough)
-
-Copy the notebook into the Jupyter container folder:
-
-**Windows:**
-```powershell
-Copy-Item ".\notebook\04_cleaning.ipynb" "C:\path\to\docker-hadoop-spark-jupyter\docker-hadoop-spark-jupyter\notebooks\04_cleaning.ipynb"
-```
-
-**Mac/Linux:**
-```bash
-cp notebook/04_cleaning.ipynb ~/path/to/docker-hadoop-spark-jupyter/docker-hadoop-spark-jupyter/notebooks/
-```
-
-Open your browser at `http://localhost:8888`.
-
-To get the login token:
-
-**Windows PowerShell:**
-```powershell
-docker logs jupyter 2>&1 | Select-String "token="
-```
-
-**Mac/Linux:**
-```bash
-docker logs jupyter 2>&1 | grep "token="
-```
-
----
-
-## For Members 2–5 — Where to Start After Member 1
-
-After Member 1 runs the pipeline, the cleaned data is available at:
-
-```text
-hdfs://namenode:9000/user/bigdata/ids2017/processed/cleaned
-```
-
-Read it in any PySpark notebook or script:
-
-```python
-from pyspark.sql import SparkSession
-
-spark = SparkSession.builder \
-    .master("spark://spark-master:7077") \
-    .config("spark.executor.memory", "1500m") \
-    .config("spark.executor.cores", "1") \
-    .config("spark.driver.memory", "512m") \
-    .config("spark.sql.shuffle.partitions", "4") \
-    .getOrCreate()
-
-df = spark.read.parquet("hdfs://namenode:9000/user/bigdata/ids2017/processed/cleaned")
-df.printSchema()
-```
-
-**Dataset info after Member 1 cleaning:**
+**CIC-IDS2017** — Canadian Institute for Cybersecurity Intrusion Detection System 2017
 
 | Property | Value |
 |---|---|
-| Rows | 785,583 |
-| Columns | 122 |
-| Column names | snake_case, e.g. `bytes_rate`, `fwd_packets_count` |
-| Feature type | Double |
-| Label column | `label` string |
+| Raw size | ~600 MB (14 CSV files) |
+| Total records | 785,583 network flows |
+| Features | 122 numeric columns |
+| Classes (original) | 12 (11 attack types + BENIGN) |
+| Classification task | Binary: BENIGN (0) vs. ATTACK (1) |
 
-**Label values after Member 1 cleaning:**
+**Label distribution after cleaning:**
 
-| Label | Count |
+| Attack Type | Count |
 |---|---:|
 | DOS_HULK | 349,240 |
 | PORT_SCAN | 161,323 |
@@ -199,427 +138,329 @@ df.printSchema()
 | WEB_ATTACK | 4,116 |
 | HEARTBLEED | 12 |
 
-> `WEB_ATTACK` combines three original classes: Web Brute Force, XSS, and SQL Injection.
+> `WEB_ATTACK` consolidates Web Brute Force, XSS, and SQL Injection into a single class.
+
+The raw CSVs are excluded from git (`.gitignore`). Place all 14 CSV files in `data/raw/CSVs/` before running the pipeline.
 
 ---
 
-## Member 2 — Preprocessing Part B + Feature Engineering
+## Folder Structure
 
-Member 2 starts from Member 1's cleaned Parquet output:
-
-```text
-hdfs://namenode:9000/user/bigdata/ids2017/processed/cleaned
 ```
-
-Member 2 creates the final machine-learning-ready dataset for Members 3 and 4.
-
-### Member 2 Main File
-
-```text
-05_feature_engineering.py
+network-attack-detection/
+│
+├── dashboard/
+│   └── app.py                        ← Streamlit interactive dashboard
+│
+├── deliverables/
+│   ├── paper/                        ← Final paper (place PDF here)
+│   └── presentation/
+│       └── final presentation.pptx   ← Slide deck
+│
+├── notebook/
+│   ├── 04_cleaning.ipynb             ← EDA and cleaning walkthrough
+│   └── 05_feature_engineering.ipynb  ← Feature engineering walkthrough
+│
+├── outputs/
+│   ├── hdfs_export/                  ← Local mirror of HDFS Parquet outputs
+│   │   ├── processed/cleaned/
+│   │   ├── processed/ml_ready_binary/
+│   │   └── results/                  ← model_a, model_b, model_c, model_comparison_all
+│   └── readable_exports/             ← Human-readable CSV/HTML samples
+│
+├── reports/
+│   ├── figures/                      ← 8 publication-quality PNG charts
+│   ├── metrics/                      ← confusion_matrices.json, roc_auc.json
+│   ├── tables/                       ← Attack distribution & metric CSVs
+│   ├── architecture.png              ← System architecture diagram
+│   ├── dashboard.html                ← Standalone HTML dashboard (661 KB)
+│   ├── model_comparison_report.html  ← HTML model comparison report
+│   └── Section4_System_Architecture.docx
+│
+├── scripts/
+│   ├── pipeline/                     ← Core Spark jobs (submitted to cluster)
+│   │   ├── 04_clean.py               ← Data ingestion and cleaning
+│   │   ├── 05_feature_engineering.py ← Feature engineering and ML preparation
+│   │   ├── 06_model_baseline.py      ← Logistic Regression
+│   │   ├── 07_model_improved.py      ← Deep Learning MLP
+│   │   ├── 08_model_random_forest.py ← Random Forest
+│   │   └── 09_compare_all_models.py  ← Model comparison and HTML report
+│   │
+│   ├── reporting/                    ← Local visualization scripts (no cluster needed)
+│   │   ├── 13_build_dashboard.py     ← Generate 8 PNG figures
+│   │   ├── 14_build_html_dashboard.py← Build self-contained HTML dashboard
+│   │   ├── 15_build_architecture_diagram.py
+│   │   └── run_dashboard_only.py     ← Re-run all reporting in one command
+│   │
+│   ├── 02_upload_hdfs.sh / .ps1      ← Upload CSVs to HDFS
+│   ├── 03_submit.sh / .ps1           ← Submit cleaning job
+│   ├── 05_submit_features.sh / .ps1  ← Submit feature engineering job
+│   ├── 06_submit_baseline.ps1        ← Submit Logistic Regression job
+│   ├── 07_submit_improved.sh / .ps1  ← Submit Deep Learning MLP job
+│   ├── 08_submit_random_forest.sh / .ps1 ← Submit Random Forest job
+│   ├── 09_submit_compare_all.sh / .ps1   ← Submit model comparison job
+│   └── 10_export_readable_outputs.py ← Export HDFS Parquet to local CSV
+│
+├── data/
+│   └── raw/CSVs/                     ← 14 CSV files go here (gitignored, ~600 MB)
+│
+├── run_pipeline.sh                   ← Master orchestrator (full end-to-end run)
+├── verify_pipeline.sh                ← Verify pipeline completion status
+├── requirements.txt                  ← Python dependencies (local reporting)
+├── .gitignore
+└── LICENSE
 ```
-
-### Member 2 Tasks
-
-- Read the cleaned Parquet data from HDFS.
-- Preserve the original multiclass label in `label_original`.
-- Convert the target into binary classification:
-  - `BENIGN` → `0.0`
-  - any attack type → `1.0`
-- Create engineered network-flow features:
-  - `total_packets`
-  - `total_payload_bytes`
-  - `avg_payload_per_packet`
-  - `fwd_bwd_packet_ratio`
-  - `log_duration`
-  - `log_bytes_rate`
-  - `log_packets_rate`
-- Select all numeric columns using Spark numeric data types.
-- Convert numeric columns to `double`.
-- Convert NaN values to null.
-- Handle outliers using percentile capping:
-  - values below the 1st percentile are capped
-  - values above the 99th percentile are capped
-- Fill remaining missing numeric values with `0.0`.
-- Assemble all numeric feature columns into one Spark MLlib vector column named `features`.
-- Save the final ML-ready dataset to HDFS.
-
-### Run Member 2 Job
-
-Run from the `network-attack-detection` project folder.
-
-**Windows:**
-```powershell
-.\scripts\05_submit_features.ps1
-```
-
-**Mac/Linux:**
-```bash
-bash scripts/05_submit_features.sh
-```
-
-Mac/Linux users may need to make the script executable first:
-
-```bash
-chmod +x scripts/05_submit_features.sh
-```
-
-### Member 2 Output
-
-Member 2 saves the ML-ready dataset at:
-
-```text
-hdfs://namenode:9000/user/bigdata/ids2017/processed/ml_ready_binary
-```
-
-Final output columns:
-
-| Column | Description |
-|---|---|
-| `features` | Spark MLlib vector containing all numeric features |
-| `label` | Binary target label: `0.0 = BENIGN`, `1.0 = ATTACK` |
-| `label_original` | Original attack type before binary conversion |
-
-Check that the output exists:
-
-```bash
-docker exec namenode hdfs dfs -ls -h /user/bigdata/ids2017/processed/ml_ready_binary
-```
-
-If the folder contains `_SUCCESS` and `.parquet` files, Member 2 completed successfully.
-
-### Optional Jupyter Notebook (Member 2 walkthrough)
-
-A walkthrough notebook is included for explanation/demo:
-
-```text
-notebook/05_feature_engineering.ipynb
-```
-
-Copy it into the Jupyter notebooks folder.
-
-**Windows:**
-```powershell
-Copy-Item ".\notebook\05_feature_engineering.ipynb" "C:\path\to\docker-hadoop-spark-jupyter\docker-hadoop-spark-jupyter\notebooks\05_feature_engineering.ipynb"
-```
-
-**Mac/Linux:**
-```bash
-cp notebook/05_feature_engineering.ipynb ~/path/to/docker-hadoop-spark-jupyter/docker-hadoop-spark-jupyter/notebooks/
-```
-
-Open Jupyter at:
-
-```text
-http://localhost:8888
-```
-
-The notebook is optional. The main executable implementation is `05_feature_engineering.py`.
 
 ---
 
-## For Members 3 and 4 — Start Modeling
+## Installation
 
-Members 3 and 4 should start from the ML-ready dataset produced by Member 2:
+### Prerequisites
 
-```text
-hdfs://namenode:9000/user/bigdata/ids2017/processed/ml_ready_binary
-```
+- [Docker Desktop](https://docs.docker.com/desktop/) (running)
+- Python 3.8+
+- The `docker-hadoop-spark-jupyter` cluster folder
+- The 14 CIC-IDS2017 CSV files (~600 MB total)
 
-This dataset already contains:
-
-- `features`
-- `label`
-- `label_original`
-
-So modeling members do not need to repeat cleaning, binary label conversion, missing-value handling, outlier handling, or feature vector assembly.
-
-### Step 1 — Check that ML-ready data exists
-
-Run from the project folder after the cluster is running:
+### 1. Clone the repository
 
 ```bash
-docker exec namenode hdfs dfs -ls -h /user/bigdata/ids2017/processed/ml_ready_binary
+git clone https://github.com/zakariahmedd34/network-attack-detection.git
+cd network-attack-detection
 ```
 
-If the folder exists and contains `_SUCCESS`, start modeling directly.
+### 2. Install local Python dependencies
 
-If it does not exist, run Member 2 first:
-
-**Windows:**
-```powershell
-.\scripts\05_submit_features.ps1
-```
-
-**Mac/Linux:**
 ```bash
-bash scripts/05_submit_features.sh
+pip install -r requirements.txt
 ```
 
-If Member 1 cleaned data also does not exist, run the full pipeline:
+### 3. Place the dataset CSVs
 
-**Windows:**
-```powershell
-.\scripts\02_upload_hdfs.ps1
-.\scripts\03_submit.ps1
-.\scripts\05_submit_features.ps1
+```
+network-attack-detection/
+└── data/
+    └── raw/
+        └── CSVs/        ← all 14 .csv files here
 ```
 
-**Mac/Linux:**
+### 4. Start the Hadoop/Spark cluster
+
 ```bash
-bash scripts/02_upload_hdfs.sh
-bash scripts/03_submit.sh
-bash scripts/05_submit_features.sh
+# from the docker-hadoop-spark-jupyter folder:
+docker compose up -d
+
+# verify all services are running:
+docker ps
+# Expected: namenode, datanode, spark-master, spark-worker-1, jupyter
 ```
-
-### Step 2 — Read the ML-ready dataset in PySpark
-
-```python
-from pyspark.sql import SparkSession
-
-spark = (
-    SparkSession.builder
-    .appName("IDS2017-Modeling")
-    .master("spark://spark-master:7077")
-    .config("spark.executor.memory", "1500m")
-    .config("spark.executor.cores", "1")
-    .config("spark.driver.memory", "512m")
-    .config("spark.sql.shuffle.partitions", "4")
-    .getOrCreate()
-)
-
-df = spark.read.parquet("hdfs://namenode:9000/user/bigdata/ids2017/processed/ml_ready_binary")
-
-df.printSchema()
-df.groupBy("label").count().show()
-df.show(5, truncate=False)
-```
-
-Expected schema:
-
-```text
-features: vector
-label: double
-label_original: string
-```
-
-### Suggested Member 3 Work
-
-Member 3 should build the baseline model.
-
-Suggested files:
-
-```text
-06_model_baseline.py
-scripts/06_submit_baseline.ps1
-scripts/06_submit_baseline.sh
-```
-
-Suggested baseline models:
-
-- Logistic Regression
-- Decision Tree
-
-Suggested result path:
-
-```text
-hdfs://namenode:9000/user/bigdata/ids2017/results/model_a_baseline
-```
-
-Member 3 should report baseline evaluation metrics such as accuracy, precision, recall, F1-score, and AUC-ROC.
-
-### Suggested Member 4 Work
-
-Member 4 should build the improved model and compare it with Model A.
-
-Suggested files:
-
-```text
-07_model_improved.py
-scripts/07_submit_improved.ps1
-scripts/07_submit_improved.sh
-```
-
-Suggested improved models:
-
-- Random Forest
-- Tuned Decision Tree
-- Gradient-Boosted Tree, if suitable
-
-Suggested result path:
-
-```text
-hdfs://namenode:9000/user/bigdata/ids2017/results/model_b_improved
-```
-
-Member 4 should compare Model A and Model B using:
-
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- AUC-ROC
 
 ---
 
-## For Member 5 — Integration + Visualization + Pipeline Execution
+## Running the Pipeline
 
-Member 5 should verify that the whole pipeline runs end-to-end and prepare final visual outputs.
+### One-command full run
 
-Suggested inputs:
-
-```text
-hdfs://namenode:9000/user/bigdata/ids2017/processed/ml_ready_binary
-hdfs://namenode:9000/user/bigdata/ids2017/results/model_a_baseline
-hdfs://namenode:9000/user/bigdata/ids2017/results/model_b_improved
+```bash
+bash run_pipeline.sh
 ```
 
-Suggested work:
+This executes every stage in order. Stages with an existing HDFS `_SUCCESS` marker are automatically skipped, making it safe to re-run at any point.
 
-- Verify that the full pipeline can run from raw CSVs to final results.
-- Build visualizations for dataset distribution and model metrics.
-- Compare Model A and Model B visually.
-- Prepare charts/dashboard outputs for the final presentation.
-- Confirm final HDFS outputs and file paths.
+### Manual stage-by-stage execution
 
-Suggested visualizations:
+| Stage | Mac/Linux | Windows |
+|---|---|---|
+| Upload CSVs to HDFS | `bash scripts/02_upload_hdfs.sh` | `.\scripts\02_upload_hdfs.ps1` |
+| Data cleaning | `bash scripts/03_submit.sh` | `.\scripts\03_submit.ps1` |
+| Feature engineering | `bash scripts/05_submit_features.sh` | `.\scripts\05_submit_features.ps1` |
+| Logistic Regression | *(see run_pipeline.sh fallback)* | `.\scripts\06_submit_baseline.ps1` |
+| Deep Learning MLP | `bash scripts/07_submit_improved.sh` | `.\scripts\07_submit_improved.ps1` |
+| Random Forest | `bash scripts/08_submit_random_forest.sh` | `.\scripts\08_submit_random_forest.ps1` |
+| Model comparison | `bash scripts/09_submit_compare_all.sh` | `.\scripts\09_submit_compare_all.ps1` |
+| Export to local CSV | `python3 scripts/10_export_readable_outputs.py` | `python scripts/10_export_readable_outputs.py` |
 
-- Original attack type distribution
-- Binary BENIGN vs ATTACK distribution
-- Model A vs Model B metric comparison
-- Confusion matrix visualization
-- ROC/AUC comparison, if available
+### Verify completion
 
----
+```bash
+bash verify_pipeline.sh
+```
 
-## Useful URLs (while cluster is running)
+### Useful cluster URLs (while running)
 
 | Service | URL |
 |---|---|
 | Jupyter | http://localhost:8888 |
-| HDFS browser | http://localhost:9870 |
+| HDFS Browser | http://localhost:9870 |
 | Spark UI | http://localhost:8080 |
+
+### Notebooks (optional walkthroughs)
+
+Copy a notebook into the Jupyter container's notebooks folder, then open http://localhost:8888:
+
+```bash
+# Mac/Linux
+cp notebook/04_cleaning.ipynb ~/path/to/docker-hadoop-spark-jupyter/notebooks/
+cp notebook/05_feature_engineering.ipynb ~/path/to/docker-hadoop-spark-jupyter/notebooks/
+
+# Windows PowerShell
+Copy-Item ".\notebook\04_cleaning.ipynb" "C:\path\to\docker-hadoop-spark-jupyter\notebooks\"
+```
 
 ---
 
-## File Structure
+## Local Reports & Interactive Dashboard
 
+All visualizations can be regenerated without the cluster, using the committed Parquet outputs in `outputs/hdfs_export/`.
+
+### Regenerate all figures and HTML reports
+
+```bash
+python scripts/reporting/run_dashboard_only.py
 ```
-network-attack-detection/
-├── 04_clean.py                         <- Member 1 Spark cleaning job
-├── 05_feature_engineering.py           <- Member 2 feature engineering job
-├── scripts/
-│   ├── 02_upload_hdfs.ps1              <- Upload CSVs to HDFS (Windows)
-│   ├── 02_upload_hdfs.sh               <- Upload CSVs to HDFS (Mac/Linux)
-│   ├── 03_submit.ps1                   <- Run Member 1 cleaning job (Windows)
-│   ├── 03_submit.sh                    <- Run Member 1 cleaning job (Mac/Linux)
-│   ├── 05_submit_features.ps1          <- Run Member 2 feature engineering job (Windows)
-│   └── 05_submit_features.sh           <- Run Member 2 feature engineering job (Mac/Linux)
-├── notebook/
-│   ├── 04_cleaning.ipynb               <- Member 1 EDA + cleaning walkthrough
-│   └── 05_feature_engineering.ipynb    <- Member 2 feature engineering walkthrough
-└── data/
-    └── raw/
-        └── CSVs/                       <- dataset goes here (not in git)
+
+This produces:
+- `reports/figures/*.png` — 8 publication-quality charts
+- `reports/dashboard.html` — self-contained HTML dashboard
+- `reports/architecture.png` — system architecture diagram
+
+### Launch the interactive Streamlit dashboard
+
+```bash
+streamlit run dashboard/app.py
 ```
+
+The dashboard provides:
+- Live KPI cards (best model, best F1, AUC)
+- Attack-type distribution charts
+- Interactive model comparison bar chart
+- Side-by-side confusion matrices
+- Overlaid ROC curves for all three models
+
+---
+
+## Results
+
+### Attack Type Distribution
+
+![Attack Type Distribution](reports/figures/01_attack_type_distribution.png)
+
+*Horizontal bar chart of all 12 attack classes. DOS_HULK dominates at 349,240 flows, while HEARTBLEED has only 12 — highlighting the severe class imbalance present in real-world intrusion data.*
+
+### Binary Class Split (BENIGN vs. ATTACK)
+
+![Binary Class Distribution](reports/figures/02_binary_class_distribution.png)
+
+*BENIGN flows account for 17% of the dataset (133,770 rows) versus ATTACK at 83% (651,813 rows). All three models handle this 5:1 imbalance well, achieving high precision and recall simultaneously.*
+
+### Model Metric Comparison
+
+![Model Metric Comparison](reports/figures/03_metric_comparison.png)
+
+*Grouped bar chart comparing accuracy, precision, recall, F1-score, and AUC-ROC across all three models. Random Forest achieves near-perfect scores on every metric.*
+
+### Confusion Matrices
+
+| Logistic Regression | Deep Learning MLP | Random Forest |
+|---|---|---|
+| ![CM - LR](reports/figures/04_confusion_model_a__logistic_regression.png) | ![CM - MLP](reports/figures/04_confusion_model_b__deep_learning_mlp.png) | ![CM - RF](reports/figures/04_confusion_model_c__random_forest.png) |
+
+*Each heatmap shows true vs. predicted labels on the 157,117-row test set. Random Forest achieves the fewest misclassifications.*
+
+### ROC Curves
+
+![ROC Curves](reports/figures/05_roc_curves.png)
+
+*All three models achieve strong AUC scores. Random Forest reaches AUC = 0.9999, indicating near-perfect discrimination between benign and attack flows.*
+
+### Pipeline Data Flow
+
+![Pipeline Data Flow](reports/figures/06_pipeline_data_flow.png)
+
+*Data volume at each pipeline stage: from 14 raw CSVs through cleaning, feature engineering, three model training runs, and final comparison.*
+
+---
+
+## Performance Metrics
+
+All models are evaluated on the **same held-out test set** (80/20 split, seed=42, ~157,117 rows).
+
+| Model | Accuracy | Precision | Recall | F1 Score | AUC-ROC |
+|---|---|---|---|---|---|
+| Logistic Regression | 0.9581 | 0.9579 | 0.9581 | 0.9580 | 0.9783 |
+| Deep Learning MLP | 0.9831 | 0.9830 | 0.9831 | 0.9829 | 0.9940 |
+| **Random Forest** | **0.9954** | **0.9954** | **0.9954** | **0.9954** | **0.9999** |
+
+**Random Forest** outperforms the baseline by **+3.73 pp** in F1 and achieves near-perfect AUC (0.9999 vs. 0.9783).
+
+### Model Configuration
+
+| Parameter | Logistic Regression | Deep Learning MLP | Random Forest |
+|---|---|---|---|
+| Algorithm | Logistic Regression | MultilayerPerceptronClassifier | RandomForestClassifier |
+| Key settings | maxIter=10 | 3 layers, maxIter=80, blockSize=256 | numTrees=80, maxDepth=12, impurity=gini |
+| Scaling | None | StandardScaler | None |
+| Training rows | ~628,466 | ~628,466 | ~628,466 |
+| Test rows | ~157,117 | ~157,117 | ~157,117 |
 
 ---
 
 ## Common Issues
 
-**Docker says containers are not running**
-
-Make sure Docker Desktop is open and the green icon shows it is running. Then run `docker compose up -d` from the cluster folder.
-
----
-
-**Permission denied on Mac/Linux when running `.sh` scripts**
+**`ModuleNotFoundError: No module named 'numpy'` in Spark containers**
 
 ```bash
-chmod +x scripts/02_upload_hdfs.sh scripts/03_submit.sh scripts/05_submit_features.sh
-```
-
----
-
-**HDFS already has old data from a previous run**
-
-The upload script skips existing files automatically. If you need a clean HDFS:
-
-```bash
-docker exec namenode hdfs dfs -rm -r /user/bigdata/ids2017
-```
-
-Then run the upload script again.
-
----
-
-**Jupyter token not showing**
-
-**Windows PowerShell:**
-```powershell
-docker logs jupyter 2>&1 | Select-String "token="
-```
-
-**Mac/Linux:**
-```bash
-docker logs jupyter 2>&1 | grep "token="
-```
-
----
-
-**PySpark ML error: `ModuleNotFoundError: No module named 'numpy'`**
-
-Install NumPy inside the Spark containers:
-
-```bash
-docker exec spark-master bash -lc "apk add --no-cache py3-numpy"
+docker exec spark-master   bash -lc "apk add --no-cache py3-numpy"
 docker exec spark-worker-1 bash -lc "apk add --no-cache py3-numpy"
 ```
 
-Then rerun the Spark job.
+**Permission denied on `.sh` scripts (Mac/Linux)**
 
----
+```bash
+chmod +x scripts/*.sh
+```
 
-**Member 2 says cleaned data is missing**
+**HDFS has stale data from a previous run**
 
-Check Member 1 output:
+```bash
+docker exec namenode hdfs dfs -rm -r /user/bigdata/ids2017
+bash scripts/02_upload_hdfs.sh
+```
 
+**Jupyter token not showing**
+
+```bash
+# Mac/Linux
+docker logs jupyter 2>&1 | grep "token="
+
+# Windows PowerShell
+docker logs jupyter 2>&1 | Select-String "token="
+```
+
+**A pipeline stage cannot find its upstream input**
+
+Check that the upstream stage completed successfully:
 ```bash
 docker exec namenode hdfs dfs -ls -h /user/bigdata/ids2017/processed/cleaned
-```
-
-If it does not exist, run Member 1 first:
-
-**Windows:**
-```powershell
-.\scripts\02_upload_hdfs.ps1
-.\scripts\03_submit.ps1
-```
-
-**Mac/Linux:**
-```bash
-bash scripts/02_upload_hdfs.sh
-bash scripts/03_submit.sh
-```
-
----
-
-**Members 3 or 4 cannot find `ml_ready_binary`**
-
-Check Member 2 output:
-
-```bash
 docker exec namenode hdfs dfs -ls -h /user/bigdata/ids2017/processed/ml_ready_binary
 ```
 
-If it does not exist, run Member 2:
+If the output is missing, re-run `bash run_pipeline.sh` — it will execute only incomplete stages.
 
-**Windows:**
-```powershell
-.\scripts\05_submit_features.ps1
-```
+---
 
-**Mac/Linux:**
-```bash
-bash scripts/05_submit_features.sh
-```
+## Future Improvements
+
+- **Multi-class classification** — extend models to predict individual attack types instead of binary BENIGN/ATTACK, using `label_original`
+- **Class imbalance handling** — apply SMOTE or class-weighted training to improve detection of rare attacks (e.g., HEARTBLEED with only 12 samples)
+- **Hyperparameter tuning** — integrate Spark MLlib's `CrossValidator` or `TrainValidationSplit` for automated search
+- **Streaming detection** — replace batch ingestion with Spark Structured Streaming on a Kafka source for real-time inference
+- **Feature importance** — extract and visualize Random Forest feature importances to identify the most discriminative network flow statistics
+- **Model persistence** — save trained models to HDFS with `model.save()` for production serving
+- **Automated CI/CD** — add GitHub Actions to validate that reporting scripts produce consistent outputs on every push
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

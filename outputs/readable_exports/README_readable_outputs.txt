@@ -1,8 +1,8 @@
 Readable outputs exported from HDFS Parquet files.
 
 This folder contains:
-- CSV samples from Member 1 cleaned data
-- CSV samples from Member 2 ML-ready data
+- CSV samples from the cleaned dataset
+- CSV samples from the ML-ready dataset
 - CSV prediction samples for Model A, Model B, and Model C
 - CSV metrics and confusion matrices
 - HTML summary report

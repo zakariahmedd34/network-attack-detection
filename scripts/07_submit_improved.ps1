@@ -1,4 +1,4 @@
-# 07_submit_improved.ps1 -- submit Member 4 improved model job to Spark
+# 07_submit_improved.ps1 -- submit Deep Learning MLP model job to Spark
 # Run from project root:
 # .\scripts\07_submit_improved.ps1
 
@@ -28,15 +28,15 @@ if (!(Test-Path $SCRIPT)) {
 docker exec $NAMENODE hdfs dfs -test -e /user/bigdata/ids2017/processed/ml_ready_binary
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: ML-ready dataset not found in HDFS."
-    Write-Host "Run Member 2 feature engineering first:"
+    Write-Host "Run the feature engineering job first:"
     Write-Host "  .\scripts\05_submit_features.ps1"
     exit 1
 }
 
-Write-Host "Copying Member 4 improved model script to container..."
+Write-Host "Copying Deep Learning MLP script to container..."
 docker cp $SCRIPT "${CONTAINER}:${REMOTE}"
 
-Write-Host "Submitting Member 4 improved model job..."
+Write-Host "Submitting Deep Learning MLP job..."
 docker exec $CONTAINER /spark/bin/spark-submit `
     --master spark://spark-master:7077 `
     --deploy-mode client `
@@ -48,13 +48,13 @@ docker exec $CONTAINER /spark/bin/spark-submit `
     $REMOTE
 
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Member 4 spark-submit failed."
+    Write-Host "ERROR: spark-submit failed."
     exit 1
 }
 
 docker exec $CONTAINER rm -f $REMOTE 2>$null
 
-Write-Host "Member 4 output in HDFS:"
+Write-Host "Deep Learning MLP output in HDFS:"
 docker exec $NAMENODE hdfs dfs -ls -h /user/bigdata/ids2017/results/model_b_improved
 
 Write-Host "Done."

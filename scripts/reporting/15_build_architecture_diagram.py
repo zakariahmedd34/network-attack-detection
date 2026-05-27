@@ -13,7 +13,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent.parent  # scripts/reporting/ → scripts/ → project root
 OUT = ROOT / "reports" / "architecture.png"
 OUT.parent.mkdir(parents=True, exist_ok=True)
 

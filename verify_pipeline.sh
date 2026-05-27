@@ -75,9 +75,9 @@ for f in "${ARTEFACTS[@]}"; do
 done
 
 # ---- Metric summary ----------------------------------------------------------
-if [ -f reports/figures/03_metric_comparison.csv ]; then
-  say "Final metrics (from reports/figures/03_metric_comparison.csv)"
-  cat reports/figures/03_metric_comparison.csv | column -t -s,
+if [ -f reports/tables/03_metric_comparison.csv ]; then
+  say "Final metrics (from reports/tables/03_metric_comparison.csv)"
+  cat reports/tables/03_metric_comparison.csv | column -t -s,
 fi
 
 echo ""

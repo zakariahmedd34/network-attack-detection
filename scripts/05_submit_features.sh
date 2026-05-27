@@ -1,5 +1,5 @@
 #!/bin/bash
-# 05_submit_features.sh -- submit Member 2 feature engineering job to Spark
+# 05_submit_features.sh -- submit feature engineering job to Spark
 # Run from project root:
 # bash scripts/05_submit_features.sh
 
@@ -28,16 +28,16 @@ if [ ! -f "$SCRIPT" ]; then
 fi
 
 if ! docker exec "$NAMENODE" hdfs dfs -test -e /user/bigdata/ids2017/processed/cleaned; then
-    echo "ERROR: Member 1 cleaned data not found in HDFS."
-    echo "Run Member 1 cleaning job first:"
+    echo "ERROR: Cleaned data not found in HDFS."
+    echo "Run the cleaning job first:"
     echo "  bash scripts/03_submit.sh"
     exit 1
 fi
 
-echo "Copying Member 2 script to container..."
+echo "Copying feature engineering script to container..."
 docker cp "$SCRIPT" "$CONTAINER:$REMOTE"
 
-echo "Submitting Member 2 feature engineering job..."
+echo "Submitting feature engineering job..."
 docker exec "$CONTAINER" /spark/bin/spark-submit \
     --master spark://spark-master:7077 \
     --deploy-mode client \
@@ -50,7 +50,7 @@ docker exec "$CONTAINER" /spark/bin/spark-submit \
 
 docker exec "$CONTAINER" rm -f "$REMOTE" 2>/dev/null || true
 
-echo "Member 2 output in HDFS:"
+echo "Feature engineering output in HDFS:"
 docker exec "$NAMENODE" hdfs dfs -ls -h /user/bigdata/ids2017/processed/ml_ready_binary
 
 echo "Done."

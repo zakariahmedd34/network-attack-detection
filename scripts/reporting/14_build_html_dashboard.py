@@ -6,14 +6,14 @@ exposing port 8501 is inconvenient (e.g. inside the Jupyter container).
 Run after 13_build_dashboard.py:
     python 14_build_html_dashboard.py
 
-Opens reports/member5_dashboard.html in any browser. No server needed.
+Opens reports/dashboard.html in any browser. No server needed.
 """
 from __future__ import annotations
 import json
 import base64
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent.parent  # scripts/reporting/ → scripts/ → project root
 FIG_DIR = ROOT / "reports" / "figures"
 OUT_HTML = ROOT / "reports" / "dashboard.html"
 
@@ -26,9 +26,10 @@ def main() -> None:
     if not FIG_DIR.exists():
         raise SystemExit("Run 13_build_dashboard.py first to populate reports/figures/")
 
-    with open(FIG_DIR / "04_confusion_matrices.json") as f:
+    METRICS_DIR = ROOT / "reports" / "metrics"
+    with open(METRICS_DIR / "04_confusion_matrices.json") as f:
         cm = json.load(f)
-    with open(FIG_DIR / "05_roc_auc.json") as f:
+    with open(METRICS_DIR / "05_roc_auc.json") as f:
         auc = json.load(f)
 
     sections = [
@@ -86,7 +87,7 @@ th{{background:#f1f5f9}}
 </style></head>
 <body><main>
 <h1>Network Attack Detection</h1>
-<p class='caption'>CSCI461 Big Data project &middot; CIC-IDS2017 &middot; Hadoop + Spark + Spark MLlib</p>
+<p class='caption'>CIC-IDS2017 Network Intrusion Detection &middot; Hadoop + Spark + Spark MLlib</p>
 <div class='kpi'>
   <div><b>Random Forest</b>Best model (F1)</div>
   <div><b>0.9954</b>Best F1 score</div>

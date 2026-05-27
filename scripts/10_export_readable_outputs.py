@@ -19,8 +19,8 @@ spark = (
 spark.sparkContext.setLogLevel("WARN")
 
 paths = {
-    "member1_cleaned": "hdfs://namenode:9000/user/bigdata/ids2017/processed/cleaned",
-    "member2_ml_ready": "hdfs://namenode:9000/user/bigdata/ids2017/processed/ml_ready_binary",
+    "cleaned": "hdfs://namenode:9000/user/bigdata/ids2017/processed/cleaned",
+    "ml_ready": "hdfs://namenode:9000/user/bigdata/ids2017/processed/ml_ready_binary",
 
     "model_a_predictions": "hdfs://namenode:9000/user/bigdata/ids2017/results/model_a_baseline",
 
@@ -81,16 +81,16 @@ def save_schema(df, filename):
 
     print(f"Saved {filename}")
 
-# Member 1 and Member 2 readable samples
-member1 = read_parquet("member1_cleaned")
-save_schema(member1, "member1_cleaned_schema.txt")
-save_csv(member1, "member1_cleaned_sample_50.csv", limit=50)
+# Cleaned and ML-ready samples
+cleaned = read_parquet("cleaned")
+save_schema(cleaned, "cleaned_schema.txt")
+save_csv(cleaned, "cleaned_sample_50.csv", limit=50)
 
-member2 = read_parquet("member2_ml_ready")
-save_schema(member2, "member2_ml_ready_schema.txt")
+ml_ready = read_parquet("ml_ready")
+save_schema(ml_ready, "ml_ready_schema.txt")
 save_csv(
-    member2,
-    "member2_ml_ready_sample_100.csv",
+    ml_ready,
+    "ml_ready_sample_100.csv",
     limit=100,
     preferred_cols=["label_original", "label"]
 )
@@ -195,8 +195,8 @@ with open(os.path.join(OUT, "README_readable_outputs.txt"), "w", encoding="utf-8
     f.write("""Readable outputs exported from HDFS Parquet files.
 
 This folder contains:
-- CSV samples from Member 1 cleaned data
-- CSV samples from Member 2 ML-ready data
+- CSV samples from the cleaned dataset
+- CSV samples from the ML-ready dataset
 - CSV prediction samples for Model A, Model B, and Model C
 - CSV metrics and confusion matrices
 - HTML summary report

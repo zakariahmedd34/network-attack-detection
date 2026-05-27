@@ -28,7 +28,7 @@ if (!(Test-Path $SCRIPT)) {
 docker exec $NAMENODE hdfs dfs -test -e /user/bigdata/ids2017/processed/ml_ready_binary
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: ML-ready dataset not found in HDFS."
-    Write-Host "Run Member 2 feature engineering first:"
+    Write-Host "Run the feature engineering job first:"
     Write-Host "  .\scripts\05_submit_features.ps1"
     exit 1
 }
