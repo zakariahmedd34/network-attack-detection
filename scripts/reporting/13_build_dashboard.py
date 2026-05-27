@@ -20,10 +20,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc as sk_auc
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent.parent  # scripts/reporting/ → scripts/ → project root
 HDFS_EXPORT = ROOT / "outputs" / "hdfs_export"
 FIG_DIR = ROOT / "reports" / "figures"
+TABLES_DIR = ROOT / "reports" / "tables"
+METRICS_DIR = ROOT / "reports" / "metrics"
 FIG_DIR.mkdir(parents=True, exist_ok=True)
+TABLES_DIR.mkdir(parents=True, exist_ok=True)
+METRICS_DIR.mkdir(parents=True, exist_ok=True)
 
 MODELS = [
     ("Model A - Logistic Regression",
@@ -75,7 +79,7 @@ def chart_attack_distribution():
     out = FIG_DIR / "01_attack_type_distribution.png"
     plt.savefig(out, dpi=150)
     plt.close()
-    counts.to_csv(FIG_DIR / "01_attack_type_distribution.csv")
+    counts.to_csv(TABLES_DIR / "01_attack_type_distribution.csv")
     print("  saved:", out)
 
 
@@ -102,7 +106,7 @@ def chart_binary_distribution():
     out = FIG_DIR / "02_binary_class_distribution.png"
     plt.savefig(out, dpi=150)
     plt.close()
-    counts.to_csv(FIG_DIR / "02_binary_class_distribution.csv")
+    counts.to_csv(TABLES_DIR / "02_binary_class_distribution.csv")
     print("  saved:", out)
 
 
@@ -133,7 +137,7 @@ def chart_metric_comparison():
     out = FIG_DIR / "03_metric_comparison.png"
     plt.savefig(out, dpi=150)
     plt.close()
-    pivot.to_csv(FIG_DIR / "03_metric_comparison.csv")
+    pivot.to_csv(TABLES_DIR / "03_metric_comparison.csv")
     print("  saved:", out)
     return pivot
 
@@ -169,7 +173,7 @@ def chart_confusion_matrices():
         plt.close()
         print("  saved:", out)
 
-    with open(FIG_DIR / "04_confusion_matrices.json", "w") as f:
+    with open(METRICS_DIR / "04_confusion_matrices.json", "w") as f:
         json.dump(summary, f, indent=2)
 
 
@@ -200,7 +204,7 @@ def chart_roc_curves():
     plt.close()
     print("  saved:", out)
 
-    with open(FIG_DIR / "05_roc_auc.json", "w") as f:
+    with open(METRICS_DIR / "05_roc_auc.json", "w") as f:
         json.dump(auc_table, f, indent=2)
 
 

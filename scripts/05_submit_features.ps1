@@ -1,4 +1,4 @@
-# 05_submit_features.ps1 -- submit Member 2 feature engineering job to Spark
+# 05_submit_features.ps1 -- submit feature engineering job to Spark
 # Run from project root:
 # .\scripts\05_submit_features.ps1
 
@@ -28,19 +28,19 @@ if (!(Test-Path $SCRIPT)) {
     exit 1
 }
 
-# Check Member 1 cleaned data exists
+# Check cleaned data exists
 docker exec $NAMENODE hdfs dfs -test -e /user/bigdata/ids2017/processed/cleaned
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Member 1 cleaned data not found in HDFS."
-    Write-Host "Run Member 1 cleaning job first:"
+    Write-Host "ERROR: Cleaned data not found in HDFS."
+    Write-Host "Run the cleaning job first:"
     Write-Host "  .\scripts\03_submit.ps1"
     exit 1
 }
 
-Write-Host "Copying Member 2 script to container..."
+Write-Host "Copying feature engineering script to container..."
 docker cp $SCRIPT "${CONTAINER}:${REMOTE}"
 
-Write-Host "Submitting Member 2 feature engineering job..."
+Write-Host "Submitting feature engineering job..."
 docker exec $CONTAINER /spark/bin/spark-submit `
     --master spark://spark-master:7077 `
     --deploy-mode client `
@@ -52,13 +52,13 @@ docker exec $CONTAINER /spark/bin/spark-submit `
     $REMOTE
 
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Member 2 spark-submit failed."
+    Write-Host "ERROR: spark-submit failed."
     exit 1
 }
 
 docker exec $CONTAINER rm -f $REMOTE 2>$null
 
-Write-Host "Member 2 output in HDFS:"
+Write-Host "Feature engineering output in HDFS:"
 docker exec $NAMENODE hdfs dfs -ls -h /user/bigdata/ids2017/processed/ml_ready_binary
 
 Write-Host "Done."

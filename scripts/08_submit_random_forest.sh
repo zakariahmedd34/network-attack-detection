@@ -29,7 +29,7 @@ fi
 
 if ! docker exec "$NAMENODE" hdfs dfs -test -e /user/bigdata/ids2017/processed/ml_ready_binary; then
     echo "ERROR: ML-ready dataset not found in HDFS."
-    echo "Run Member 2 feature engineering first:"
+    echo "Run the feature engineering job first:"
     echo "  bash scripts/05_submit_features.sh"
     exit 1
 fi

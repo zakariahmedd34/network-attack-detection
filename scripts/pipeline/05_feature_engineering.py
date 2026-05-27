@@ -23,7 +23,7 @@ HDFS_ML_READY = "hdfs://namenode:9000/user/bigdata/ids2017/processed/ml_ready_bi
 # -------------------------------------------------------
 spark = (
     SparkSession.builder
-    .appName("IDS2017-Member2-FeatureEngineering")
+    .appName("IDS2017-FeatureEngineering")
     .master("spark://spark-master:7077")
     .config("spark.executor.memory", "1500m")
     .config("spark.executor.cores", "1")
@@ -35,9 +35,9 @@ spark = (
 spark.sparkContext.setLogLevel("WARN")
 
 # -------------------------------------------------------
-# Step 1: Read Member 1 cleaned data
+# Step 1: Read cleaned data
 # -------------------------------------------------------
-print("Step 1: Reading Member 1 cleaned Parquet")
+print("Step 1: Reading cleaned Parquet")
 
 df = spark.read.parquet(HDFS_CLEANED)
 

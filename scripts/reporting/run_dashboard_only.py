@@ -1,21 +1,23 @@
 """
-Local-only end-to-end runner.
+Local-only report regenerator.
 
 Reads the saved Parquet outputs under outputs/hdfs_export/ and regenerates
-every figure, the standalone HTML dashboard, the architecture diagram, and
-the paper section .docx. No Docker, no Spark, no HDFS required.
+all figures, the standalone HTML dashboard, and the architecture diagram.
+No Docker, no Spark, no HDFS required.
 
-Run:
+Run from the project root:
     pip install -r requirements.txt
-    python run_dashboard_only.py
+    python scripts/reporting/run_dashboard_only.py
 """
 from __future__ import annotations
 import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-HDFS_EXPORT = ROOT / "outputs" / "hdfs_export"
+# scripts/reporting/run_dashboard_only.py → parent=reporting/ → parent=scripts/ → parent=project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+REPORTING_DIR = Path(__file__).resolve().parent
+HDFS_EXPORT = PROJECT_ROOT / "outputs" / "hdfs_export"
 
 if not HDFS_EXPORT.exists():
     sys.exit(
@@ -28,14 +30,14 @@ scripts = [
     "13_build_dashboard.py",
     "14_build_html_dashboard.py",
     "15_build_architecture_diagram.py",
-    "16_build_paper_docx.py",
 ]
 
 for s in scripts:
+    script_path = REPORTING_DIR / s
     print(f"\n=== Running {s} ===")
-    subprocess.check_call([sys.executable, str(ROOT / s)])
+    subprocess.check_call([sys.executable, str(script_path)])
 
 print("\n=== All done ===")
-print("Open the dashboard:   open reports/dashboard.html")
-print("Open the diagram:     open reports/architecture.png")
-print("Open the paper docx:  open reports/Section4_System_Architecture.docx")
+print("Open the dashboard:   reports/dashboard.html")
+print("Open the diagram:     reports/architecture.png")
+print("Interactive app:      streamlit run dashboard/app.py")

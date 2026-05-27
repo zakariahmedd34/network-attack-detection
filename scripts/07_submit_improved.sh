@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 07_submit_improved.sh -- submit Member 4 improved model job to Spark
+# 07_submit_improved.sh -- submit Deep Learning MLP model job to Spark
 # Run from project root:
 # bash scripts/07_submit_improved.sh
 
@@ -29,15 +29,15 @@ fi
 
 if ! docker exec "$NAMENODE" hdfs dfs -test -e /user/bigdata/ids2017/processed/ml_ready_binary; then
     echo "ERROR: ML-ready dataset not found in HDFS."
-    echo "Run Member 2 feature engineering first:"
+    echo "Run the feature engineering job first:"
     echo "  bash scripts/05_submit_features.sh"
     exit 1
 fi
 
-echo "Copying Member 4 improved model script to container..."
+echo "Copying Deep Learning MLP script to container..."
 docker cp "$SCRIPT" "${CONTAINER}:${REMOTE}"
 
-echo "Submitting Member 4 improved model job..."
+echo "Submitting Deep Learning MLP job..."
 docker exec "$CONTAINER" /spark/bin/spark-submit \
     --master spark://spark-master:7077 \
     --deploy-mode client \
@@ -50,7 +50,7 @@ docker exec "$CONTAINER" /spark/bin/spark-submit \
 
 docker exec "$CONTAINER" rm -f "$REMOTE" 2>/dev/null || true
 
-echo "Member 4 output in HDFS:"
+echo "Deep Learning MLP output in HDFS:"
 docker exec "$NAMENODE" hdfs dfs -ls -h /user/bigdata/ids2017/results/model_b_improved
 
 echo "Done."

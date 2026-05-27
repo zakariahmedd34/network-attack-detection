@@ -1,0 +1,11 @@
+# Local reporting & dashboard — no cluster required
+pandas>=1.5
+numpy>=1.23
+matplotlib>=3.6
+scikit-learn>=1.1
+pyarrow>=10.0
+streamlit>=1.22
+
+# PySpark pipeline — requires the Docker Hadoop/Spark cluster
+# Uncomment if you need to run spark-submit jobs locally:
+# pyspark>=3.3

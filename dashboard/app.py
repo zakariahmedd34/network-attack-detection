@@ -52,8 +52,7 @@ def extract_prob_class1(prob_series):
 
 
 st.title("Network Attack Detection — IDS2017")
-st.caption("CSCI461 Big Data project · "
-           "Hadoop + Spark + Spark MLlib")
+st.caption("CIC-IDS2017 Network Intrusion Detection · Hadoop + Spark + Spark MLlib")
 
 # -------------------------- Top KPIs --------------------------
 metrics_df = read_parquet_dir(str(HDFS_EXPORT / "results" /
